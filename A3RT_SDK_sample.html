@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>a3rt/a3rt-sdk-js: A3RT SDK for JavaScript</title>
+		<script src="https://code.jquery.com/jquery-2.2.0.min.js" integrity="sha256-ihAoc6M/JPfrIiIeayPE9xjin4UWjsx2mjW/rtmxLM4=" crossorigin="anonymous"></script>
+		<script type="text/javascript" src="./A3RT_SDK.js"></script>
+		<script>
+			var uploadURL = "";
+			function removeResult() {
+				var element = document.getElementById("result");
+				element = element.children;
+				if ($(element).length > 0) {
+					$(element).remove();
+				}
+			}
+
+			function get_text_suggest(form) {
+				removeResult();
+
+				var input_apikey = $(form).find('input[name="apikey"]').val();
+				var input_discription = $(form).find('textarea[name="previous_description"]').val();
+				var input_style = $(form).find('input[name="style"]').val();
+				var input_separation = $(form).find('input[name="separation"]').val();
+				var input_callback = $(form).find('input[name="callback"]').val();
+
+				a3rt_text_suggest(input_apikey, input_discription, input_style, input_separation, input_callback).done(function (json) {
+					$("#result").append("<div id=\"text_suggest_result\">")
+					$("#text_suggest_result").append("STATUS : " + json.status);
+					if (json.status != null) {
+						$("#text_suggest_result").append("<div>OK</div><ul>");
+						for (var i = 0; i < json.suggestion.length; i++) {
+							$("#text_suggest_result").append("<li>" + json.suggestion[i] + "</li>");
+						}
+						$("#text_suggest_result").append("</ul>");
+					} else {
+						uploadURL = json.result.url;
+						$("#text_suggest_result").append("<div>" + json.result.url + "</div>");
+					}
+				}).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+					json = JSON.parse(XMLHttpRequest.responseText);
+					$("#result").append("<div id=\"text_suggest_result\"></div>")
+					$("#text_suggest_result").append("ERROR :(" + json.status + ") " + json.message);
+				});
+
+				return false;
+			}
+
+			function get_text_classification(form) {
+				removeResult();
+
+				var input_apikey = $(form).find('input[name="apikey"]').val();
+				var input_model = $(form).find('input[name="model_id"]').val();
+				var input_text = $(form).find('textarea[name="text"]').val();
+
+				a3rt_text_classification(input_apikey, input_model, input_text).done(function (json) {
+					$("#result").append("<div id=\"text_classification_result\">")
+					$("#text_classification_result").append("STATUS : " + json.status);
+					if (json.status != null) {
+						$("#text_classification_result").append("<div>OK</div><ul>");
+						for (var i = 0; i < json.classes.length; i++) {
+							$("#text_classification_result").append("<li>" + json.classes[i].label + " : " + json.classes[i].probability + "</li>");
+						}
+						$("#text_classification_result").append("</ul>");
+					} else {
+						$("#text_classification_result").append("<div>" + json.message + "</div>");
+					}
+				}).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+					json = JSON.parse(XMLHttpRequest.responseText);
+					$("#result").append("<div id=\"text_classification_result\"></div>")
+					$("#text_suggest_result").append("ERROR :(" + json.status + ") " + json.message);
+				});
+
+				return false;
+			}
+
+			function get_talk(form) {
+				removeResult();
+
+				var input_apikey = $(form).find('input[name="apikey"]').val();
+				var input_query = $(form).find('textarea[name="query"]').val();
+				var input_callback = $(form).find('input[name="callback"]').val();
+
+				a3rt_talk(input_apikey, input_query, input_callback).done(function (json) {
+					$("#result").append("<div id=\"talk_result\">")
+					$("#talk_result").append("STATUS : " + json.status);
+					if (json.status != null) {
+						$("#talk_result").append("<div>OK</div><ul>");
+						$("#talk_result").append("REPLY:" + json.results[0].reply);
+					} else {
+						uploadURL = json.result.url;
+						$("#talk_result").append("<div>" + json.result.url + "</div>");
+					}
+				}).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+					json = JSON.parse(XMLHttpRequest.responseText);
+					$("#result").append("<div id=\"talk_result\"></div>")
+					$("#talk_result").append("ERROR :(" + json.status + ") " + json.message);
+				});
+
+				return false;
+			}
+
+			function upload_imageInf(form) {
+				removeResult();
+
+				var input_apikey = $(form).find('input[name="apikey"]').val();
+				var input_predict = $(form).find('input[name="predict"]').val();
+				var input_imagefile = $(form).find('input[name="imagefile"]')[0].files[0];
+
+				a3rt_image_infl(input_apikey, input_predict, input_imagefile).done(function (json) {
+					$("#result").append("<div id=\"imageInf_result\">")
+					$("#imageInf_result").append("STATUS : " + json.status);
+					if (json.status != null) {
+						$("#imageInf_result").append("<table id=\"resultMap\" border=1> </table>");
+						$("#resultMap").append("<tr><th>STATUS</th><th>MESSAGE</th><th>SCORE</th></tr>");
+						$("#resultMap").append("<tr><td>" + json.status + "</td><td>" + json.message + "</td><td>" + json.result.score + "</td></tr>");
+					} else {
+						uploadURL = json.result.url;
+						$("#imageInf_result").append("<div>" + json.result.url + "</div>");
+					}
+				}).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+					json = JSON.parse(XMLHttpRequest.responseText);
+					$("#result").append("<div id=\"imageInf_result\"></div>")
+					$("#imageInf_result").append("ERROR :(" + json.status + ") " + json.message);
+				});
+
+				return false;
+			}
+
+			function get_proofreading(form) {
+				removeResult();
+
+				var input_apikey = $(form).find('input[name="apikey"]').val();
+				var select_sensitivity = $(form).find('select[name="sensitivity"]').val();
+				var input_sentence = $(form).find('textarea[name="sentence"]').val();
+				var input_callback = $(form).find('input[name="callback"]').val();
+
+				a3rt_proofreading(input_apikey, input_sentence, select_sensitivity, input_callback).done(function (json) {
+					$("#result").append("<div id=\"proofreading_result\">")
+					$("#proofreading_result").append("STATUS : " + json.status);
+					if (json.alerts != null) {
+						$("#proofreading_result").append("<div>OK</div><ul>");
+						for (var i = 0; i < json.alerts.length; i++) {
+							$("#proofreading_result").append("<li>checkedSentence=" + json.alerts[i].checkedSentence + "</li>");
+							$("#proofreading_result").append("<li>alertCode=" + json.alerts[i].alertCode + "</li>");
+							$("#proofreading_result").append("<li>alertDetail=" + json.alerts[i].alertDetail + "</li>");
+							$("#proofreading_result").append("<li>word=" + json.alerts[i].word + "</li>");
+							$("#proofreading_result").append("<li>rankingScore=" + json.alerts[i].rankingScore + "</li>");
+						}
+						$("#proofreading_result").append("</ul>");
+					}
+				}).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+					json = JSON.parse(XMLHttpRequest.responseText);
+					$("#result").append("<div id=\"proofreading_result\"></div>")
+					$("#proofreading_result").append("ERROR :(" + json.status + ") " + json.message);
+				});
+
+				return false;
+			}
+		</script>
+	</head>
+	<body>
+
+		<h2>■□■ Text Suggest API ■□■</h2>
+		<div id="AJaxForm_text_suggest">
+			<form enctype="multipart/form-data" name="text_suggest" id="text_suggest" method="get" onSubmit="return get_text_suggest(this);">
+				<p>
+					<label>apikey* :
+					</label>
+					<input type="text" name="apikey" size="32" value="">
+				</p>
+				<p>
+					<label>style :
+					</label>
+					<input type="text" name="style" size="1" apikey_value="0">
+				</p>
+				<p>
+					<label>separation :
+					</label>
+					<input type="text" name="separation" size="1" apikey_value="0">
+				</p>
+				<p>
+					<label>previous_description* :
+					</label>
+					<textarea rows="5" cols="80" name="previous_description">馬</textarea>
+				</p>
+				<p>
+					<label>callback :
+					</label>
+					<input type="text" name="callback" size="32" value="">
+				</p>
+				<input type="submit" value="送信" id="send">
+			</form>
+		</div>
+
+		<h2>■□■ Text Classification API ■□■</h2>
+		<div id="AJaxForm_text_classification">
+			<form enctype="multipart/form-data" name="text_classification" id="text_classification" method="get" onSubmit="return get_text_classification(this);">
+				<p>
+					<label>apikey :</label>
+					<input type="text" name="apikey" size="32" value="">
+				</p>
+				<p>
+					<label>model* :
+					</label>
+					<input type="text" name="model_id" size="1" value="default"></p>
+				<p>
+					<label>text* :
+					</label>
+					<textarea rows="5" cols="80" name="text">システムの企画から開発・運用まで幅広く関われます。</textarea>
+				</p>
+				<input type="submit" value="送信" id="send">
+			</form>
+		</div>
+
+		<h2>■□■ Talk API ■□■</h2>
+		<div id="AJaxForm_talk">
+			<form enctype="multipart/form-data" name="talk" id="talk" method="get" onSubmit="return get_talk(this);">
+				<p>
+					<label>apikey* :</label>
+					<input type="text" name="apikey" size="32" value="">
+				</p>
+				<p>
+					<label>query* :
+					</label>
+					<textarea rows="5" cols="80" name="query">おはよう</textarea>
+				</p>
+				<p>
+					<label>callback :
+					</label>
+					<input type="text" name="callback" size="32" value="">
+				</p>
+				<input type="submit" value="送信" id="send">
+			</form>
+		</div>
+
+		<h2>■□■ Image Influence API ■□■</h2>
+		<div id="AJaxForm_imageInf">
+			<form enctype="multipart/form-data" name="imageInf" id="imageInf" method="post" onSubmit="return upload_imageInf(this);">
+				<p>
+					<label>apikey* :
+					</label>
+					<input type="text" name="apikey" size="32" value="">
+				</p>
+				<p>
+					<label>predict* :
+					</label>
+					<input type="text" name="predict" size="3" value="1">
+				</p>
+				<p>
+					<label>imagefile :</label>
+					<input type="file" name="imagefile">
+				</p>
+				<input type="hidden" name="dummy" value="dummy">
+				<input type="submit" value="送信" id="send">
+			</form>
+		</div>
+
+		<h2>■□■ Proofreading API ■□■</h2>
+		<div id="AJaxForm_text_classification">
+			<form enctype="multipart/form-data" name="proofreading" id="proofreading" method="get" onSubmit="return get_proofreading(this);">
+				<p>
+					<label>apikey* :
+					</label>
+					<input type="text" name="apikey" size="32" value="">
+				</p>
+				<p>
+					<label>sensitivity :
+					</label>
+					<select name="sensitivity">
+						<option value=""></option>
+						<option value="low">low</option>
+						<option value="medium">medium</option>
+						<option value="high">high</option>
+					</select>
+				</p>
+				<p>
+					<label>sentence* :
+					</label>
+					<textarea rows="5" cols="80" name="sentence">システムの規格から開発・運用まで幅広く関われます。</textarea>
+				</p>
+				<p>
+					<label>callback :
+					</label>
+					<input type="text" name="callback" size="32" value="">
+				</p>
+				<input type="submit" value="送信" id="send">
+			</form>
+		</div>
+
+		<h2>--- 処理結果 ---</h2>
+		<div id="result"></div>
+
+	</body>
+</html>
