@@ -26,9 +26,9 @@ a3rt_text_suggest(a3rt_key,a3rt_description,a3rt_style,a3rt_separation, a3rt_cal
 
 ### 2. TEXT CLASSIFICATION API
 ```js
-a3rt_text_suggest(a3rt_key,a3rt_description,a3rt_style,a3rt_separation, a3rt_callback)
-	.done(function(json){	/ 正常の処理		})
-	.fail(function (XMLHttpRequest, textStatus, errorThrown) { /異常の処理	});
+a3rt_text_classification(a3rt_key, a3rt_model_id, a3rt_text)
+  .done(function(json){	/ 正常の処理		})
+  .fail(function (XMLHttpRequest, textStatus, errorThrown) { /異常の処理	});
 ```
 
 [https://a3rt.recruit-tech.co.jp/product/textClassificationAPI/](https://a3rt.recruit-tech.co.jp/product/textClassificationAPI/)
