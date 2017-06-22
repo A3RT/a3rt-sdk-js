@@ -5,7 +5,7 @@
 ## Requirement
 
 - jquery-2.X.X
-  - 動作確認済：jquery-2.2.0.
+  - Tested：jquery-2.2.0
 
 ## Installation
 ```html
