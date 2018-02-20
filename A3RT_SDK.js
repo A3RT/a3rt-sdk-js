@@ -23,7 +23,7 @@ function a3rt_text_suggest(a3rt_key, 　a3rt_description, 　a3rt_style, 　a3rt
     'apikey': a3rt_key,
     'previous_description': a3rt_description
   }
-  var a3rt_url = 'https://api.a3rt.recruit-tech.co.jp/text_suggest/v1/predict'
+  var a3rt_url = 'https://api.a3rt.recruit-tech.co.jp/text_suggest/v2/predict'
 
   if (a3rt_style != null && a3rt_style.length > 0) {
     input_data['style'] = a3rt_style
@@ -185,7 +185,7 @@ function a3rt_proofreading(a3rt_key, a3rt_sentence, a3rt_sensitivity, a3rt_callb
     'apikey': a3rt_key,
     'sentence': a3rt_sentence
   }
-  var a3rt_url = 'https://api.a3rt.recruit-tech.co.jp/proofreading/v1/typo'
+  var a3rt_url = 'https://api.a3rt.recruit-tech.co.jp/proofreading/v2/typo'
 
   if (a3rt_sensitivity != null && a3rt_sensitivity.length > 0) {
     input_data['sensitivity'] = a3rt_sensitivity
