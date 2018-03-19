@@ -140,12 +140,13 @@
 					$("#proofreading_result").append("STATUS : " + json.status);
 					if (json.alerts != null) {
 						$("#proofreading_result").append("<div>OK</div><ul>");
+						$("#proofreading_result").append("<li>[入力文] " + json.inputSentence + "</li>");
+						$("#proofreading_result").append("<li>[校閲結果] " + json.checkedSentence + "</li>");
 						for (var i = 0; i < json.alerts.length; i++) {
-							$("#proofreading_result").append("<li>checkedSentence=" + json.alerts[i].checkedSentence + "</li>");
-							$("#proofreading_result").append("<li>alertCode=" + json.alerts[i].alertCode + "</li>");
-							$("#proofreading_result").append("<li>alertDetail=" + json.alerts[i].alertDetail + "</li>");
-							$("#proofreading_result").append("<li>word=" + json.alerts[i].word + "</li>");
-							$("#proofreading_result").append("<li>rankingScore=" + json.alerts[i].rankingScore + "</li>");
+											
+							$("#proofreading_result").append("<li>[word_"+[i+1]+"] " + json.alerts[i].word+ "</li>");
+							$("#proofreading_result").append("<li>[suggest_"+[i+1]+"] " + json.alerts[i].suggestions + "</li>");
+							$("#proofreading_result").append("<li>[score_"+[i+1]+"] " + json.alerts[i].score + "</li>");
 						}
 						$("#proofreading_result").append("</ul>");
 					}
