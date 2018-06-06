@@ -15,6 +15,37 @@
 				}
 			}
 
+
+			function get_text_summarization(form) {
+				removeResult();
+
+				var input_apikey = $(form).find('input[name="apikey"]').val();
+				var input_sentences = $(form).find('textarea[name="sentences"]').val();
+				var input_linenumber= $(form).find('input[name="linenumber"]').val();
+				var input_separation = $(form).find('input[name="separation"]').val();
+				
+				a3rt_text_summarization(input_apikey, input_sentences, input_linenumber, input_separation).done(function (json) {
+					$("#result").append("<div id=\"text_summarization_result\">")
+					$("#text_summarization_result").append("STATUS : " + json.status);
+					if (json.status != null) {
+						$("#text_summarization_result").append("<div>OK</div><ul>");
+						for (var i = 0; i < json.summary.length; i++) {
+							$("#text_summarization_result").append("<li>" + json.summary[i] + "</li>");
+						}
+						$("#text_summarization_result").append("</ul>");
+					} else {
+						uploadURL = json.result.url;
+						$("#tex_summarization_result").append("<div>" + json.result.url + "</div>");
+					}
+				}).fail(function (XMLHttpRequest, textStatus, errorThrown) {
+					json = JSON.parse(XMLHttpRequest.responseText);
+					$("#result").append("<div id=\"text_summarization_result\"></div>")
+					$("#text_summarization_result").append("ERROR :(" + json.status + ") " + json.message);
+				});
+
+				return false;
+			}
+
 			function get_text_suggest(form) {
 				removeResult();
 
@@ -288,6 +319,37 @@
 				<input type="submit" value="送信" id="send">
 			</form>
 		</div>
+
+
+
+		<h2>■□■ Text Summarization API ■□■</h2>
+		<div id="AJaxForm_text_summarization">
+			<form enctype="multipart/form-data" name="text_summarization" id="text_summarization" method="get" onSubmit="return get_text_summarization(this);">
+				<p>
+					<label>apikey* :
+					</label>
+					<input type="text" name="apikey" size="32" value="">
+				</p>
+				<p>
+					<label>	linenumber :
+					</label>
+					<input type="text" name="linenumber" size="1" apikey_value="0">
+				</p>
+				<p>
+					<label>separation :
+					</label>
+					<input type="text" name="separation" size="1" apikey_value="0">
+				</p>
+				<p>
+					<label>	sentences* :
+					</label>
+					<textarea rows="5" cols="80" name="sentences">センテンス1。センテンス2。センテンス3。センテンス4。センテンス5。センテンス6。センテンス7。センテンス8。センテンス9。センテンス10。</textarea>
+				</p>
+
+				<input type="submit" value="送信" id="send">
+			</form>
+		</div>
+
 
 		<h2>--- 処理結果 ---</h2>
 		<div id="result"></div>
