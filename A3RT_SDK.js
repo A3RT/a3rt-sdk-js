@@ -1,6 +1,63 @@
 /* インストール
 <script type='text/javascript' src='./A3RT_SDK.js'></script>
 
+
+
+TEXT SUMMARIZATION API
+ <使い方>
+  a3rt_text_suggest(a3rt_key,a3rt_description,a3rt_style,a3rt_separation, a3rt_callback)
+  .done(function(json){ / 正常の処理   })
+  .fail(function (XMLHttpRequest, textStatus, errorThrown) { /異常の処理 });
+
+  <パラメーターの説明>
+  https://a3rt.recruit-tech.co.jp/product/TextSummarizationAPI/
+  a3rt_key =  apikey
+  a3rt_sentences = sentences
+  a3rt_linenumber = linenumber
+  a3rt_separation  = separation 
+
+*/
+
+function a3rt_text_summarization(a3rt_key, 　 a3rt_sentences, 　a3rt_linenumber, 　a3rt_separation) {
+
+  var input_data = {
+    'apikey': a3rt_key,
+    'sentences': a3rt_sentences
+  }
+  var a3rt_url = 'https://api.a3rt.recruit-tech.co.jp/text_summarization/v1'
+
+  if (a3rt_linenumber != null && a3rt_linenumber.length > 0) {
+    input_data['linenumber'] = a3rt_linenumber
+  };
+
+
+  if (a3rt_separation != null && a3rt_separation.length > 0) {
+    input_data['separation'] = a3rt_separation
+  };
+
+
+  return $.ajax({
+    type: 'post',
+    url: a3rt_url,
+    processData: true,
+    contentType: 'application/x-www-form-urlencoded;charset=utf-8',
+    data: input_data,
+    dataType: 'json',
+  });
+
+  return 0;
+
+}
+
+
+
+
+
+/* インストール
+<script type='text/javascript' src='./A3RT_SDK.js'></script>
+
+
+
 TEXT SUGGEST
  <使い方>
 	a3rt_text_suggest(a3rt_key,a3rt_description,a3rt_style,a3rt_separation, a3rt_callback)
