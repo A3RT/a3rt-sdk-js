@@ -18,7 +18,7 @@ TEXT SUMMARIZATION API
 
 */
 
-function a3rt_text_summarization(a3rt_key, 　 a3rt_sentences, 　a3rt_linenumber, 　a3rt_separation) {
+function a3rt_text_summarization(a3rt_key, a3rt_sentences, a3rt_linenumber, a3rt_separation) {
 
   var input_data = {
     'apikey': a3rt_key,
