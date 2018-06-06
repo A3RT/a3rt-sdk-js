@@ -60,7 +60,7 @@ a3rt_proofreading(a3rt_key,a3rt_sentence,a3rt_sensitivity,a3rt_callback)
 
 [https://a3rt.recruit-tech.co.jp/product/proofreadingAPI/](https://a3rt.recruit-tech.co.jp/product/proofreadingAPI/)
 
-### 1. TEXT SUMMARIZATION API
+### 6. TEXT SUMMARIZATION API
 ```js
 a3rt_text_summarization(a3rt_key,a3rt_sentences,a3rt_linenumber,a3rt_separation)
   .done(function(json){ / 正常の処理   })
